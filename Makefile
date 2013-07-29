@@ -1,7 +1,7 @@
 # Copyright (C) 2013 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2013-07-29, 13:08 (CEST) Massimo Lauria"
+# Time-stamp: "2013-07-29, 16:26 (CEST) Massimo Lauria"
 #
 #
 # Makefile for the cnftools utilities. 
@@ -12,7 +12,7 @@
 
 # --------- Project dependent rules ---------------
 PKGNAME=cnftools
-TARGET=reader
+TARGET=reader testcode
 TIME=$(shell date +%Y.%m.%d-%H.%M)
 
 #
@@ -51,11 +51,18 @@ all: ${TARGET}
 SRC=./
 INC=-I${SRC}
 
-OTHERFLAGS=-finline-functions -fno-builtin --pedantic --pedantic-errors -Wall
+#
+# Cppunit Test 
+#
+CPPUNITLIBS=$(shell cppunit-config --libs)
 
+
+OTHERFLAGS=-finline-functions -fno-builtin --pedantic --pedantic-errors -Wall
 CFLAGS=${OPTIMIZATION} ${DEBUG} ${PROFILE} ${OTHERFLAGS}   ${C_STANDARD}
-CXXFLAGS=${OPTIMIZATION} ${DEBUG} ${PROFILE} ${OTHERFLAGS} ${CXX_STDLIB} ${CXX_STANDARD}
+CXXFLAGS=${OPTIMIZATION} ${DEBUG} ${PROFILE} ${OTHERFLAGS} ${CXX_STDLIB} ${CXX_STANDARD} ${CUCFLAGS}
 LDFLAGS=${DEBUG} ${PROFILE}
+LDLIBS=${CPPUNITLIBS}
+
 
 
 #
@@ -66,8 +73,9 @@ TAGFILES=GPATH GRTAGS GSYMS GTAGS tags TAGS ID
 #
 # --------- Object files
 #
-OBJS=reader.o
+OBJS=reader.o testcode.o
 reader: reader.o
+testcode: testcode.o testparser.o
 
 # --------- Default rules -------------------------
 clean:
@@ -82,13 +90,17 @@ tags:
 	$(TAGS) -I .
 
 check-syntax:
-	$(CC) ${CFLAGS} -o - -S ${CHK_SOURCES} >/dev/null
+	$(CXX) ${CXXFLAGS} -o - -S ${CHK_SOURCES} >/dev/null
 
 pkg:
 	@make clean
 	@echo "Packaging $(PKGNAME).$(TIME).tar.gz"
 	@cd .. && \
 	tar cfz $(PKGNAME).$(TIME).tar.gz $(NAME) 2> /dev/null
+
+test: testcode
+	@echo "Running tests on code"
+	./testcode
 
 #
 # files
