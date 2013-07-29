@@ -1,7 +1,7 @@
 # Copyright (C) 2013 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2013-07-29, 18:31 (CEST) Massimo Lauria"
+# Time-stamp: "2013-07-29, 18:53 (CEST) Massimo Lauria"
 #
 #
 ## Makefile for the cnftools utilities. 
@@ -12,7 +12,7 @@
 
 # --------- Project dependent rules ---------------
 PKGNAME=cnftools
-TARGET=reader testcode
+TARGET=cnfto3cnf testcode
 TIME=$(shell date +%Y.%m.%d-%H.%M)
 
 #
@@ -73,8 +73,8 @@ TAGFILES=GPATH GRTAGS GSYMS GTAGS tags TAGS ID
 #
 # --------- Object files
 #
-OBJS=reader.o testparser.o testcode.o cnftools.o 
-reader: reader.o cnftools.o
+OBJS=cnfto3cnf.o testparser.o testcode.o cnftools.o 
+cnfto3cnf: cnfto3cnf.o cnftools.o
 testcode: testcode.o testparser.o cnftools.o
 
 # --------- Default rules -------------------------
