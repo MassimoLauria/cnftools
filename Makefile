@@ -1,10 +1,10 @@
 # Copyright (C) 2013 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2013-07-29, 16:59 (CEST) Massimo Lauria"
+# Time-stamp: "2013-07-29, 18:31 (CEST) Massimo Lauria"
 #
 #
-# Makefile for the cnftools utilities. 
+## Makefile for the cnftools utilities. 
 #
 # Some build parameters follows. You should not change anything but
 # these few parameters.
@@ -73,7 +73,7 @@ TAGFILES=GPATH GRTAGS GSYMS GTAGS tags TAGS ID
 #
 # --------- Object files
 #
-OBJS=reader.o testcode.o cnftools.o
+OBJS=reader.o testparser.o testcode.o cnftools.o 
 reader: reader.o cnftools.o
 testcode: testcode.o testparser.o cnftools.o
 
