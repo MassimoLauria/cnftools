@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-24, mercoledì 02:15 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-26, 01:22 (CEST) Massimo Lauria"
+  Time-stamp: "2013-07-29, 13:54 (CEST) Massimo Lauria"
   
   Description::
   
@@ -37,6 +37,17 @@ using clause = std::vector<literal>;
  
 const literal null_literal {0};
 
+class dimacs_bad_syntax : public invalid_argument {
+public:
+  dimacs_bad_syntax(const string data) : invalid_argument{data} {}
+};
+
+class dimacs_bad_value : public domain_error {
+public:
+  dimacs_bad_value(const string data) : domain_error{data} {}
+};
+
+
 
 class cnf {
 
@@ -47,10 +58,9 @@ private:
 
   void check_clause_variables(const clause& c) {
     for (literal lit:c) {
-      if (lit==null_literal) 
-        throw domain_error{"clauses are not supposed to contain a zero value"};
+      assert(lit!=null_literal);
       if (abs(lit)>varnumber) 
-        throw domain_error{"a literal refer to non existing variables"};
+        throw dimacs_bad_value{"a literal refer to non existing variables"};
     }
   }
   
@@ -115,8 +125,8 @@ istream& operator>>(istream &in,clause& c) {
     c.push_back(tmp);
   }
 
-  if (!in) throw invalid_argument{"Bad clause specification in input."};
-  if (tmp!=0) throw invalid_argument{"Unexpected end of input."};
+  if (!in) throw dimacs_bad_syntax{"Bad clause specification in input."};
+  if (tmp!=0) throw dimacs_bad_syntax{"Unexpected end of input."};
 
   return in;
 }
@@ -140,6 +150,12 @@ ostream& operator<<(ostream &out,const cnf& formula) {
   return out;
 }
 
+bool only_spaces(const string& data) {
+  for (const auto c:data) {
+    if (!isspace(c)) return false;
+  }
+  return true;
+}
 
 /* Parse a dimacs file, which is a cnf representation of the following
    form:
@@ -154,21 +170,21 @@ p cnf 5 3
 2 1 4 0
 */
 cnf parse_dimacs(istream &in) {
-
+  
   string buffer {};
 
   // look for the cnf specification line
   while(true) {
     getline(in,buffer);
 
-    if (buffer[0]=='c')
+    if (buffer[0]=='c' || only_spaces(buffer))
       continue;
 
     else if (buffer[0]=='p')
       break;     
 
     else
-      throw invalid_argument {"non comment line before cnf specification."};
+      throw dimacs_bad_syntax{"non comment line before cnf specification."};
   }
 
   // parse the specification line
@@ -183,11 +199,11 @@ cnf parse_dimacs(istream &in) {
 
   if (!specline || spec1!="p"
       || spec2!="cnf" || n<0 || m < 0)
-    throw invalid_argument{"Bad specification line:\"p  cnf  <nvars> <nclauses>\" expected."};
+    throw dimacs_bad_syntax{"Bad specification line:\"p  cnf  <nvars> <nclauses>\" expected."};
 
   specline>>spec1;
   if (!specline.eof())
-    throw invalid_argument{"Running characters in the specification line."};
+    throw dimacs_bad_syntax{"Running characters in the specification line."};
 
   // read clauses
   cnf    formula {n};
@@ -200,6 +216,13 @@ cnf parse_dimacs(istream &in) {
   return formula;
 }
 
+/* parse a cnf in dimacs format directly form a string */
+cnf parse_dimacs(const string &data) {
+  stringstream inputdata {data};
+  return parse_dimacs(inputdata);
+}
+
+
 istream& operator>>(istream &in,cnf& formula) {
   formula = parse_dimacs(in);
   return in;
@@ -208,11 +231,12 @@ istream& operator>>(istream &in,cnf& formula) {
 
 template <typename E>
 bool parser_throws(const string& data) {
-  stringstream inputdata {data};
   try {
-    parse_dimacs(inputdata);
+    parse_dimacs(data);
   } catch(E e) {
     return true;
+  } catch(...) {
+    return false;
   }
   return false;
 }
@@ -237,30 +261,35 @@ int main(int argc, char *argv[])
 
 
   cout<<"Test: negative variables number"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf -1 4"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf -1 4"));
 
   cout<<"Test: negative clauses number"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf 1 -4"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf 1 -4"));
 
   cout<<"Test: bad formatted spec line"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf x 4 4"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf x 4 4"));
 
   cout<<"Test: bad running text"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf 1 4 asa x 4 4"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf 1 4 asa x 4 4"));
 
   cout<<"Test: bad clause specification"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf 3 4\n 2 3 x 1 0"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf 3 4\n 2 3 x 1 0"));
 
   cout<<"Test: too few clauses"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf 3 4\n 2 3 -1 0"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf 3 4\n 2 3 -1 0"));
 
   cout<<"Test: unexpected end of input"<<endl;
-  assert(parser_throws<invalid_argument>("p  cnf 3 4\n 2 3 -1 0 2 -1"));
+  assert(parser_throws<dimacs_bad_syntax>("p  cnf 3 4\n 2 3 -1 0 2 -1"));
 
   cout<<"Test: literal referring to non existent variable"<<endl;
-  assert(parser_throws<domain_error>("p  cnf 3 1\n 4 3 -1 0"));
+  assert(parser_throws<dimacs_bad_value>("p  cnf 3 1\n 4 3 -1 0"));
 
-  
+  cout<<"Test: empty lines"<<endl;
+  assert(!parser_throws<dimacs_bad_syntax>("\n\nc comment\n\np  cnf 3 1\n\n\n 4 3 -1 0"));
+
+  cout<<"Test: bad lines"<<endl;
+  assert(parser_throws<dimacs_bad_syntax>("\ndfsadssa\nc comment\n\np  cnf 3 1\n\n\n 4 3 -1 0"));
+
   return 0;
 }
 
