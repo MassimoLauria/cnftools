@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:11 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-29, 16:31 (CEST) Massimo Lauria"
+  Time-stamp: "2013-07-29, 16:58 (CEST) Massimo Lauria"
   
   Description::
   
@@ -15,7 +15,8 @@
 
 #include "testparser.hh"
 
-using namespace std;
+#include "cnftools.hh"
+
 
 void TestDimacsParser::setUp() {}
 void TestDimacsParser::tearDown() {}
