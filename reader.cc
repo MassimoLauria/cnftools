@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-24, mercoledì 02:15 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-29, 18:29 (CEST) Massimo Lauria"
+  Time-stamp: "2013-07-29, 18:51 (CEST) Massimo Lauria"
   
   Description::
   
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
   for(const auto& cla: F) {
 
-    // small clauses are copied.
+    // small clauses are copied
     if (cla.size()<=3) {
       G.add_clause(cla);
       continue;
