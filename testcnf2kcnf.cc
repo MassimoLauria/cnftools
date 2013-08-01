@@ -2,11 +2,11 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-01, giovedì 16:36 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 17:20 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 17:32 (CEST) Massimo Lauria"
   
   Description::
-  
-  aaa
+
+  Some unit tests for the cnf to k-cnf conversion.
   
 */
 

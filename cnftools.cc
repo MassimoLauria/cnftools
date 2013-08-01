@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:34 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 17:00 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 17:28 (CEST) Massimo Lauria"
   
   Description::
   
@@ -27,6 +27,17 @@ using std::endl;
 
 
 // Code
+cnf::cnf(const std::initializer_list<clause>& clauses): varnumber {0}, clauses {} {
+  for (auto& cla : clauses) {
+    for (auto& lit: cla) {
+      if (variable_numbers() < abs(lit)) 
+        add_variables(abs(lit)-variable_numbers());
+    }
+    add_clause(cla);    
+  }
+}
+
+
 
 void cnf::check_clause_variables(const clause& c) {
   for (literal lit:c) {

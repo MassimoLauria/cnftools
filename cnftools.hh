@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:35 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 17:18 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 17:28 (CEST) Massimo Lauria"
   
   Description::
   
@@ -105,7 +105,7 @@ class cnf {
       clauses  {value.clauses}
     { }
     
-    cnf(vector<clause>& clauses);
+    cnf(const std::initializer_list<clause>& clauses);
   
     variable variable_numbers() const {return varnumber;}
     
