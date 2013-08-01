@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:34 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 17:28 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 19:13 (CEST) Massimo Lauria"
   
   Description::
   
@@ -29,27 +29,12 @@ using std::endl;
 // Code
 cnf::cnf(const std::initializer_list<clause>& clauses): varnumber {0}, clauses {} {
   for (auto& cla : clauses) {
-    for (auto& lit: cla) {
-      if (variable_numbers() < abs(lit)) 
-        add_variables(abs(lit)-variable_numbers());
-    }
     add_clause(cla);    
   }
 }
 
-
-
-void cnf::check_clause_variables(const clause& c) {
-  for (literal lit:c) {
-    if (lit==null_literal)
-      throw dimacs_bad_value{"zero value is not allowed for a literal"};
-    if (abs(lit)>varnumber) 
-      throw dimacs_bad_value{"a literal refer to non existing variables"};
-  }
-}
-
 bool cnf::operator==(const cnf& other) const {
-  if (variable_numbers()!= other.variable_numbers()) return false;
+  if (variables_number()!= other.variables_number()) return false;
 
   return clauses==other.clauses;
 }
@@ -84,7 +69,7 @@ ostream& operator<<(ostream &out,const clause& c) {
 
 ostream& operator<<(ostream &out,const cnf& formula) {
   if (formula.size()>0) {
-    out<<"p cnf "<<formula.variable_numbers()<<" "<<formula.size()<<endl;
+    out<<"p cnf "<<formula.variables_number()<<" "<<formula.size()<<endl;
   }
   for (auto c : formula) {
     out<<c<<" 0"<<endl;
@@ -153,6 +138,8 @@ cnf parse_dimacs(istream &in) {
   for (size_t i=0;i<m;++i) {
     in >> c;
     formula.add_clause(c);
+    if (formula.variables_number() > n)
+      throw dimacs_bad_value{"Dimacs file contains clauses with invalid literals."};
   }
   
   return formula;
@@ -185,7 +172,7 @@ cnf cnf2kcnf(const cnf& F,size_t k) {
   
   variable extension {0};
   
-  cnf G {F.variable_numbers()};
+  cnf G {F.variables_number()};
  
   for(const auto& cla: F) {
 

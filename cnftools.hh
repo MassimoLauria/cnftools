@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:35 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 17:28 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 19:18 (CEST) Massimo Lauria"
   
   Description::
   
@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <assert.h>
 
 #ifndef _CNFTOOLS_HH_
@@ -44,18 +45,19 @@ constexpr literal toliteral(const variable& v,bool sign) {
 using std::string;
 using std::list;
 using std::vector;
+using std::initializer_list;
+using std::max;
 
 
 // parser may throw exceptions on parsing errors 
 class dimacs_bad_syntax : public std::invalid_argument {
-
-public:
-dimacs_bad_syntax(const string data) : std::invalid_argument{data} {}
+  public:
+    dimacs_bad_syntax(const string data) : std::invalid_argument{data} {}
 };
 
 class dimacs_bad_value : public std::domain_error {
-public:
-dimacs_bad_value(const string data) : domain_error{data} {}
+  public:
+    dimacs_bad_value(const string data) : domain_error{data} {}
 };
 
 
@@ -66,8 +68,6 @@ class cnf {
 
     variable varnumber;
     std::list<clause> clauses;
-    
-    void check_clause_variables(const clause& c);
     
   public:
     
@@ -107,20 +107,30 @@ class cnf {
     
     cnf(const std::initializer_list<clause>& clauses);
   
-    variable variable_numbers() const {return varnumber;}
+    variable variables_number() const {return varnumber;}
     
-    void add_variables(variable n) {
-      if (n<0)
-        throw std::invalid_argument{"Number of new variable must be non negative."};
-      varnumber += n;
+    void update_variables(variable atleast) {
+      varnumber = std::max(atleast,varnumber);
     }
   
     variable add_variable() {
       return ++varnumber;
     }
 
+    // A clause is added to the cnf. The clause is checked for sanity
+    // before any change is done to the cnf object. If clause is
+    // consistent and mentions new variables, the number of variables
+    // is raised in the cnf object.
     void add_clause(const clause& c) {
-      check_clause_variables(c);
+
+      variable newvars {0};
+
+      for (literal lit:c) {
+        if (lit==null_literal)
+          throw std::domain_error{"zero value is not allowed for a literal"};
+        newvars = max(abs(lit),newvars);
+      }
+      update_variables(newvars);
       clauses.push_back(c);
     }
     
