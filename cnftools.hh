@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:35 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-29, 16:53 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 17:18 (CEST) Massimo Lauria"
   
   Description::
   
@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <assert.h>
 
 #ifndef _CNFTOOLS_HH_
 #define _CNFTOOLS_HH_
@@ -31,10 +32,14 @@
 // Code
 
 using literal  = int;
-using variable = literal;
+using variable = int;
 using clause = std::vector<literal>;
- 
+
 const literal null_literal {0};
+
+constexpr literal toliteral(const variable& v,bool sign) {
+  return static_cast<literal>(v)*(sign?1:-1);
+}
 
 using std::string;
 using std::list;
@@ -59,7 +64,7 @@ class cnf {
 
   private:
 
-    int  varnumber;
+    variable varnumber;
     std::list<clause> clauses;
     
     void check_clause_variables(const clause& c);
@@ -72,9 +77,11 @@ class cnf {
     clause_iterator end()   const { return clauses.end(); }
   
     
-    cnf(int nvars=0):
+    cnf(variable nvars=0):
       varnumber {nvars},
-      clauses{} {}
+      clauses{} {
+        if (nvars<0)
+          throw std::invalid_argument{"Number of variable must be non negative."};}
     
     cnf& operator=(cnf&& rvalue) {
       varnumber    = rvalue.varnumber;
@@ -98,18 +105,30 @@ class cnf {
       clauses  {value.clauses}
     { }
     
-    size_t variable_numbers() const {return varnumber;}
+    cnf(vector<clause>& clauses);
+  
+    variable variable_numbers() const {return varnumber;}
     
-    void add_variables(size_t n) {
+    void add_variables(variable n) {
+      if (n<0)
+        throw std::invalid_argument{"Number of new variable must be non negative."};
       varnumber += n;
     }
-    
+  
+    variable add_variable() {
+      return ++varnumber;
+    }
+
     void add_clause(const clause& c) {
       check_clause_variables(c);
       clauses.push_back(c);
     }
     
     size_t size() const { return clauses.size(); }
+
+    bool operator==(const cnf& other) const;
+    bool operator!=(const cnf& other) const { return !((*this)==other);};
+
   };
   
 
@@ -138,6 +157,10 @@ std::istream& operator>>(std::istream &in,cnf& formula);
 
 /* parse a dimacs cnf file from a string */
 cnf parse_dimacs(const string &data);
+
+
+/* CNF manipulation */
+cnf cnf2kcnf(const cnf& F,size_t k);
 
 
 #endif /* _CNFTOOLS_HH_ */

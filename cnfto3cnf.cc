@@ -2,26 +2,28 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-24, mercoledì 02:15 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-29, 18:51 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 16:27 (CEST) Massimo Lauria"
   
   Description::
   
-  Tool to read dimacs cnf formula in input and then output a 3-CNF
+  Tool to read dimacs cnf formula in input and then output a k-CNF
   version of it.
 
-  A clause with more than three literals is transformed in a 3-CNF.
+  A clause with more than k literals is transformed in a k-CNF.
 
-  e.g. (x1 v x2 v x3 v x4)
+  e.g. (x1 v x2 v x3 v x4 v x5) and k = 4
 
   becomes
 
   y_0
-  (\neg y_0 v x1 v y_1)
-  (\neg y_1 v x2 v y_2)
-  (\neg y_2 v x3 v y_3)
-  (\neg y_3 v x4 v y_4)
-  \neg y_4
-  
+  (\neg y_0 v x1 v x2 v y_1)
+  (\neg y_1 v x3 v x4 v y_2)
+  (\neg y_2 v x5 v y_3)
+  \neg y_3
+
+  Given a clause with w literals, each new clause has k-2 original
+  literals, except for first and last which have up to k-1 original
+  variables.
 */
 
 // Preamble
@@ -30,8 +32,10 @@
 
 #include "cnftools.hh"
 
-using namespace std;
-
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 // Read clauses from input and reprints them
 int main(int argc, char *argv[])
@@ -47,36 +51,8 @@ int main(int argc, char *argv[])
     exit(-1);
   }
 
-  // this estimates the number of variables for the new formula a
-  // clause with less than four literals is left untouched.  any other
-  // is converted.
-  int total=F.variable_numbers();
-  for(const auto& cla: F) {
-    if (cla.size()>3)
-      total += cla.size()+1;
-  }
-
-  cnf G {total};
-  literal n = F.variable_numbers();
-
-  for(const auto& cla: F) {
-
-    // small clauses are copied
-    if (cla.size()<=3) {
-      G.add_clause(cla);
-      continue;
-    }
-
-    // large ones are converted
-    ++n;
-    G.add_clause({n});
-    for (auto lit: cla) {
-      G.add_clause({-n,lit,++n});
-    }
-    G.add_clause({-n});
-  }
   
-  cout<<G;
+  std::cout<<cnf2kcnf(F, 3);
   
   exit(0);
 }

@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:34 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-29, 16:56 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-01, 17:00 (CEST) Massimo Lauria"
   
   Description::
   
@@ -36,7 +36,13 @@ void cnf::check_clause_variables(const clause& c) {
       throw dimacs_bad_value{"a literal refer to non existing variables"};
   }
 }
-  
+
+bool cnf::operator==(const cnf& other) const {
+  if (variable_numbers()!= other.variable_numbers()) return false;
+
+  return clauses==other.clauses;
+}
+
 
 // input output facilities for clauses
 
@@ -117,8 +123,8 @@ cnf parse_dimacs(istream &in) {
 
   string spec1 {};
   string spec2 {};
-  int n {0}; // variable number
-  int m {0}; // clause number
+  variable n {0}; // variable number
+  size_t   m {0}; // clause number
 
   specline>>spec1>>spec2>>n>>m; // read 'p cnf <nvars> <nclauses>'
 
@@ -133,7 +139,7 @@ cnf parse_dimacs(istream &in) {
   // read clauses
   cnf    formula {n};
   clause c;
-  for (int i=0;i<m;++i) {
+  for (size_t i=0;i<m;++i) {
     in >> c;
     formula.add_clause(c);
   }
@@ -153,4 +159,70 @@ istream& operator>>(istream &in,cnf& formula) {
   return in;
 }
 
+//
+// Utility for CNF manipulations
+//
 
+
+// convert a cnf with into an equisatisfiable k-cnf using extension
+// variables.
+cnf cnf2kcnf(const cnf& F,size_t k) {
+
+  if (k<3) {
+    throw std::invalid_argument{
+      "it is not possible to convert a general cnf into a 2-CNF."};}
+  
+  variable extension {0};
+  
+  cnf G {F.variable_numbers()};
+ 
+  for(const auto& cla: F) {
+
+    // small clauses are copied
+    if (cla.size()<=k) {
+
+      G.add_clause(cla);
+      continue;
+      
+    } else  {
+
+      // clauses have k-2 original (less for the last one) variables
+      // plus an extension variable at the beginning and one at the
+      // end.  The first literal is the negation to the last of the
+      // previous clause.
+      clause tempclause {};
+
+      for(size_t i=0; i<cla.size(); ++i) {
+
+        // close previous clause and open a new one
+        if (i % (k-2)==0) {
+
+          extension=G.add_variable();
+          tempclause.push_back(toliteral(extension, true));
+          G.add_clause(tempclause);
+
+          tempclause.resize(0);
+          tempclause.push_back(toliteral(extension, false));
+        }
+        
+        tempclause.push_back(cla[i]);
+
+      }
+
+      // close the open clause
+      extension=G.add_variable();
+      tempclause.push_back(toliteral(extension, true));
+      G.add_clause(tempclause);
+
+      // last clause is just a single extension literal
+      tempclause.resize(0);
+      tempclause.push_back(toliteral(extension, false));
+      G.add_clause(tempclause);
+      
+        
+    }
+    
+  }
+
+  return G;
+}
