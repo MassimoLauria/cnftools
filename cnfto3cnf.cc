@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-24, mercoledì 02:15 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 20:22 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 15:40 (CEST) Massimo Lauria"
   
   Description::
   
@@ -110,6 +110,9 @@ int main(int argc, char *argv[])
     cin>>F;
   } catch(dimacs_bad_syntax e) {
     cerr<<"Error in parsing the dimacs input file."<<endl;
+    exit(-1);
+  } catch(dimacs_truncated e) {
+    cerr<<"Unexpected end of input."<<endl;
     exit(-1);
   } catch(dimacs_bad_value e) {
     cerr<<"The CNF formula dimacs file is inconsistent."<<endl;

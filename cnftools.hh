@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:35 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 19:18 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 17:39 (CEST) Massimo Lauria"
   
   Description::
   
@@ -49,17 +49,7 @@ using std::initializer_list;
 using std::max;
 
 
-// parser may throw exceptions on parsing errors 
-class dimacs_bad_syntax : public std::invalid_argument {
-  public:
-    dimacs_bad_syntax(const string data) : std::invalid_argument{data} {}
-};
-
-class dimacs_bad_value : public std::domain_error {
-  public:
-    dimacs_bad_value(const string data) : domain_error{data} {}
-};
-
+// parser exceptions
 
 
 class cnf {
@@ -68,9 +58,10 @@ class cnf {
 
     variable varnumber;
     std::list<clause> clauses;
-    
+  
   public:
-    
+
+    using size_type = typename std::list<clause>::size_type;
     using clause_iterator = typename std::list<clause>::const_iterator;
     
     clause_iterator begin() const { return clauses.begin(); }
@@ -134,7 +125,7 @@ class cnf {
       clauses.push_back(c);
     }
     
-    size_t size() const { return clauses.size(); }
+    size_type size() const { return clauses.size(); }
 
     bool operator==(const cnf& other) const;
     bool operator!=(const cnf& other) const { return !((*this)==other);};
@@ -142,35 +133,13 @@ class cnf {
   };
   
 
-// input output facilities for clauses
-std::istream& operator>>(std::istream &in,clause& c);
-std::ostream& operator<<(std::ostream &out,const clause& c);
-std::ostream& operator<<(std::ostream &out,const cnf& formula);
 
-
-
-/* Parse a dimacs file, which is a cnf representation of the following
-   form:
-   
-c Hello this is a comment
-c this is a 3-CNF with three
-c clauses on five variables.
-c
-p cnf 5 3
--1 3 4 0
-2 5 3 0
-2 1 4 0
-*/
-cnf parse_dimacs(std::istream &in);
-std::istream& operator>>(std::istream &in,cnf& formula);
-
-
-/* parse a dimacs cnf file from a string */
-cnf parse_dimacs(const string &data);
+#include "dimacs_io.hh"  // cnf I/O in dimacs format.
 
 
 /* CNF manipulation */
 cnf cnf2kcnf(const cnf& F,size_t k);
+
 
 
 #endif /* _CNFTOOLS_HH_ */

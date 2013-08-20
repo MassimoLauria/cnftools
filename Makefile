@@ -1,7 +1,7 @@
 # Copyright (C) 2013 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2013-08-01, 18:40 (CEST) Massimo Lauria"
+# Time-stamp: "2013-08-20, 18:08 (CEST) Massimo Lauria"
 #
 #
 ## Makefile for the cnftools utilities. 
@@ -73,9 +73,9 @@ TAGFILES=GPATH GRTAGS GSYMS GTAGS tags TAGS ID
 #
 # --------- Object files
 #
-OBJS=cnfto3cnf.o testbasic.o testparser.o testcnf2kcnf.o testcode.o cnftools.o 
-cnfto3cnf: cnfto3cnf.o cnftools.o
-testcode: testcode.o testbasic.o testparser.o testcnf2kcnf.o cnftools.o
+OBJS=cnfto3cnf.o testbasic.o testparser.o testcnf2kcnf.o testcode.o cnftools.o dimacs_io.o
+cnfto3cnf: cnfto3cnf.o cnftools.o dimacs_io.o
+testcode: testcode.o testbasic.o testparser.o testcnf2kcnf.o cnftools.o dimacs_io.o
 
 # --------- Default rules -------------------------
 clean:
