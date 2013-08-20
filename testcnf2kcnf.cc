@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-01, giovedì 16:36 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 19:03 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 19:12 (CEST) Massimo Lauria"
   
   Description::
 
@@ -33,13 +33,6 @@ void TestCnf2kcnf::test_to3cnf()
     CPPUNIT_ASSERT_MESSAGE("Conversion to 3 cnf failed",a !=b );
     CPPUNIT_ASSERT_MESSAGE("Conversion to 3 cnf failed",cnf2kcnf(a, 3)==b);
 
-    // // larger formula
-    // cnf c { {-1,3,-2,4}, {5,3,-1},
-    //         {1,-3,4}, {-1,3,-2,4}};
-        
-    
-    // CPPUNIT_ASSERT_MESSAGE("Conversion to 3 cnf failed",c !=c );
-    // CPPUNIT_ASSERT_MESSAGE("Conversion to 3 cnf failed",cnf2kcnf(c, 4)==c);
   }
 
 
@@ -55,6 +48,24 @@ void TestCnf2kcnf::test_to4cnf()
     b.add_clause({-12,7,13});
     b.add_clause({-13});
 
-    CPPUNIT_ASSERT_MESSAGE("Conversion to 3 cnf failed",a !=b );
-    CPPUNIT_ASSERT_MESSAGE("Conversion to 3 cnf failed",cnf2kcnf(a, 4)==b);
+    CPPUNIT_ASSERT_MESSAGE("Conversion to 4 cnf failed",a !=b );
+    CPPUNIT_ASSERT_MESSAGE("Conversion to 4 cnf failed",cnf2kcnf(a, 4)==b);
+
+    // larger formula
+    cnf c { {-1,3,-2,4}, {5,3,-1},
+            {1,-3,4}, {-1,3,-2,4}};
+    
+    CPPUNIT_ASSERT_MESSAGE("Null Conversion to 4-cnf from 4-cnf",cnf2kcnf(c, 4)==c);
+
+    cnf d { {-1,3,-2,4}, {5,-4,3,2,-1},
+            {1,-3,4}, {-1,3,-2,4}};
+
+    cnf e {
+      {-1,3,-2,4},
+      {6},  {-6,5,-4,7},  {-7,3,2,8},  {-8,-1,9}, {-9},
+      {1,-3,4},
+      {-1,3,-2,4}};
+    
+    CPPUNIT_ASSERT_MESSAGE("Conversion from 5-cnf from 4-cnf",cnf2kcnf(d, 4)==e);
+
   }
