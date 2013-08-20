@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:11 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 16:42 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 19:04 (CEST) Massimo Lauria"
   
   Description::
   
@@ -13,12 +13,13 @@
 // Preamble
 //#include <cppunit/extensions/HelperMacros.h>
 
-#include "testparser.hh"
+#include <string>
 
+#include "testparser.hh"
 #include "cnftools.hh"
 
 template <typename E>
-static bool parser_throws(const string& data) {
+static bool parser_throws(const std::string& data) {
   try {
     parse_dimacs(data);
   } catch(E e) {

@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-01, giovedì 16:36 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 17:32 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 19:03 (CEST) Massimo Lauria"
   
   Description::
 
@@ -15,9 +15,6 @@
 
 #include "testcnf2kcnf.hh"
 #include "cnftools.hh"
-
-
-using namespace std;
 
 void TestCnf2kcnf::setUp() {}
 void TestCnf2kcnf::tearDown() {}

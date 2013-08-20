@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-20, Tuesday 17:17 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 18:06 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 19:00 (CEST) Massimo Lauria"
   
   Description::
   
@@ -14,13 +14,13 @@
 */
 
 // Preamble
-#include "cnftools.hh"
+#include "cnf.hh"
 #include "dimacs_io.hh"
 
 // 
-#include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include <locale>
 
 using std::string;
 using std::istream;

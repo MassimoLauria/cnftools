@@ -2,50 +2,24 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:34 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 17:56 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 19:02 (CEST) Massimo Lauria"
   
   Description::
   
   An implementation of a CNF data structure plus manipulation
   functions, and a DIMACS parser.
-  
+
+  See the header file for more documentation.
 */
 
 // Preamble
 #include <cstdlib>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <locale>
 
 #include "cnftools.hh"
-
-using std::string;
-using std::istream;
-using std::stringstream;
-using std::ostream;
-using std::endl;
-using std::isdigit;
-
-// Code
-cnf::cnf(const std::initializer_list<clause>& clauses): varnumber {0}, clauses {} {
-  for (auto& cla : clauses) {
-    add_clause(cla);    
-  }
-}
-
-bool cnf::operator==(const cnf& other) const {
-  if (variables_number()!= other.variables_number()) return false;
-
-  return clauses==other.clauses;
-}
-
-
 
 //
 // Utility for CNF manipulations
 //
-
 
 // convert a cnf with into an equisatisfiable k-cnf using extension
 // variables.

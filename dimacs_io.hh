@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-20, Tuesday 17:18 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 17:49 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 18:56 (CEST) Massimo Lauria"
   
   Description::
   
@@ -74,7 +74,10 @@
 #ifndef _DIMACS_IO_HH_
 #define _DIMACS_IO_HH_
 
-#include "cnftools.hh"
+#include <iostream>
+#include <string>
+
+#include "cnf.hh"
 
 
 // input/output of CNF in dimacs format, using standard iostream operators.
@@ -83,23 +86,23 @@ std::ostream& operator<<(std::ostream &out,const cnf& formula);
 
 // Parse a CNF from a dimacs file, from input stream or from text.
 cnf parse_dimacs(std::istream &in);
-cnf parse_dimacs(const string &data);
+cnf parse_dimacs(const std::string &data);
 
 
 // Parser exceptions
 class dimacs_bad_syntax : public std::invalid_argument {
   public:
-    dimacs_bad_syntax(const string& data) : std::invalid_argument{data} {}
+    dimacs_bad_syntax(const std::string& data) : std::invalid_argument{data} {}
 };
 
 class dimacs_bad_value : public std::domain_error {
   public:
-    dimacs_bad_value(const string& data) : domain_error{data} {}
+    dimacs_bad_value(const std::string& data) : domain_error{data} {}
 };
 
 class dimacs_truncated : public std::invalid_argument {
   public:
-    dimacs_truncated(const string& data) : invalid_argument{data} {}
+    dimacs_truncated(const std::string& data) : invalid_argument{data} {}
 };
 
 

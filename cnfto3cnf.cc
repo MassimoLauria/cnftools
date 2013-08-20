@@ -2,7 +2,7 @@
   Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-24, mercoledì 02:15 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 15:40 (CEST) Massimo Lauria"
+  Time-stamp: "2013-08-20, 18:52 (CEST) Massimo Lauria"
   
   Description::
   
@@ -38,6 +38,8 @@ using std::cin;
 using std::cout;
 using std::cerr;
 using std::endl;
+using std::vector;
+using std::string;
 
 
 
