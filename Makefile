@@ -1,7 +1,7 @@
 # Copyright (C) 2013 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2013-08-20, 19:41 (CEST) Massimo Lauria"
+# Time-stamp: "2013-09-05, 10:29 (CEST) Massimo Lauria"
 #
 #
 ## Makefile for the cnftools utilities. 
@@ -12,7 +12,7 @@
 
 # --------- Project dependent rules ---------------
 PKGNAME=cnftools
-TARGET=cnfto3cnf testcode
+TARGET=cnfto3cnf
 TIME=$(shell date +%Y.%m.%d-%H.%M)
 
 #
