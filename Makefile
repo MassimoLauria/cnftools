@@ -1,7 +1,7 @@
 # Copyright (C) 2013 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2013-09-05, 10:29 (CEST) Massimo Lauria"
+# Time-stamp: "2013-09-10, 00:47 (CEST) Massimo Lauria"
 #
 #
 ## Makefile for the cnftools utilities. 
@@ -12,7 +12,7 @@
 
 # --------- Project dependent rules ---------------
 PKGNAME=cnftools
-TARGET=cnfto3cnf
+TARGET=cnf2kcnf
 TIME=$(shell date +%Y.%m.%d-%H.%M)
 
 #
@@ -27,7 +27,7 @@ OPTIMIZATION=
 #
 CC=gcc
 C_STANDARD=-std=c99
-CXX=g++-4.8
+CXX=g++
 CXX_STANDARD=-std=c++11
 CXX_STDLIB=
 TAGS=gtags # etags ctags
@@ -73,8 +73,8 @@ TAGFILES=GPATH GRTAGS GSYMS GTAGS tags TAGS ID
 #
 # --------- Object files
 #
-OBJS=cnfto3cnf.o testbasic.o testparser.o testcnf2kcnf.o testcode.o cnftools.o cnf.o dimacs_io.o
-cnfto3cnf: cnfto3cnf.o cnftools.o cnf.o dimacs_io.o
+OBJS=cnf2kcnf.o testbasic.o testparser.o testcnf2kcnf.o testcode.o cnftools.o cnf.o dimacs_io.o
+cnf2kcnf: cnf2kcnf.o cnftools.o cnf.o dimacs_io.o
 testcode: testcode.o testbasic.o testparser.o testcnf2kcnf.o cnftools.o cnf.o dimacs_io.o
 
 # --------- Default rules -------------------------
