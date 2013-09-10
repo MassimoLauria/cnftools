@@ -15,11 +15,7 @@
                                                                    
   This becomes                                                         
                                                                    
-  y₀                                                              
-  (¬y₀ v x₁ v x₂ v y₁)                                       
-  (¬y₁ v x₃ v x₄ v y₂)                                       
-  (¬y₂ v x₅ v y₂)                                            
-  ¬y₃                        
+  y₀ ∧ (¬y₀ v x₁ v x₂ v y₁) ∧ (¬y₁ v x₃ v x₄ v y₂) ∧ (¬y₂ v x₅ v y₂) ∧ ¬y₃                        
 
   where {yᵢ} are new extension variables.
 
@@ -110,6 +106,4 @@
    on  the variable  indexed by  -t.  
 
    For example if the formula is defined  on n variables x₁, x₂, …, xₙ
-   then the line =3 -1 5 6 -4 0= encodes the clause 
-
-   x3 v ¬x₁ v x₅ v x₆ v ¬x₄.
+   then the line =3 -1 5 6 -4 0= encodes the clause x3 v ¬x₁ v x₅ v x₆ v ¬x₄.
