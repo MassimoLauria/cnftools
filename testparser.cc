@@ -1,8 +1,8 @@
 /*
-  Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
+  Copyright (C) 2013, 2021 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:11 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 19:04 (CEST) Massimo Lauria"
+  Time-stamp: "2021-02-17, 01:36 (CET) Massimo Lauria"
   
   Description::
   
@@ -17,6 +17,9 @@
 
 #include "testparser.hh"
 #include "cnftools.hh"
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestDimacsParser, "Testing the dimacs parser" );
+
 
 template <typename E>
 static bool parser_throws(const std::string& data) {
@@ -72,3 +75,5 @@ void TestDimacsParser::read_clauses() {
   CPPUNIT_ASSERT_MESSAGE("Literal referring to non existent variable in the CNF",
                          parser_throws<dimacs_bad_value>("p  cnf 3 1\n 4 3 -1 0"));
 }
+
+

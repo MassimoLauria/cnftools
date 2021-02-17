@@ -1,8 +1,8 @@
 /*
-  Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
+  Copyright (C) 2013, 2021 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-01, giovedì 17:29 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-01, 19:12 (CEST) Massimo Lauria"
+  Time-stamp: "2021-02-17, 01:36 (CET) Massimo Lauria"
   
   Description::
   
@@ -30,9 +30,6 @@ public:
   virtual void test_list_constructor();
   virtual void test_clause_addition();
 };
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestBasic,
-                                       "Testing CNF object implementation" );
 
 
 #endif /* _TESTBASIC_HH_ */

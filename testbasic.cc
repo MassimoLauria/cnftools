@@ -1,8 +1,8 @@
 /*
-  Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
+  Copyright (C) 2013, 2021 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-01, giovedì 17:31 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 13:19 (CEST) Massimo Lauria"
+  Time-stamp: "2021-02-17, 01:36 (CET) Massimo Lauria"
   
   
 */
@@ -11,6 +11,10 @@
 
 #include "testbasic.hh"
 #include "cnftools.hh"
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestBasic,
+                                       "Testing CNF object implementation" );
+
 
 
 using namespace std;
@@ -51,3 +55,4 @@ void TestBasic::test_clause_addition() {
   CPPUNIT_ASSERT_THROW(a.add_clause({-6,1,0,5}),std::domain_error); // do not work well on MacOSX
   CPPUNIT_ASSERT_MESSAGE("Clause addition which raise an exception must be rolled back",a.variables_number()==5);
 }
+

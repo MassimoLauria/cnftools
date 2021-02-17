@@ -1,7 +1,7 @@
 # Copyright (C) 2013, 2021 by Massimo Lauria <lauria@kth.se>
 #
 # Created   : "2013-07-24, 01:53 (CEST) Massimo Lauria"
-# Time-stamp: "2021-02-16, 15:49 (CET) Massimo Lauria"
+# Time-stamp: "2021-02-17, 01:38 (CET) Massimo Lauria"
 #
 #
 ## Makefile for the cnftools utilities. 
@@ -12,7 +12,7 @@
 
 # --------- Project dependent rules ---------------
 PKGNAME=cnf2kcnf
-TARGET=cnf2kcnf
+TARGET=cnf2kcnf testcode
 TIME=$(shell date +%Y.%m.%d-%H.%M)
 
 #
@@ -54,7 +54,7 @@ INC=-I${SRC}
 #
 # Cppunit Test 
 #
-CPPUNITLIBS=$(shell cppunit-config --libs)
+CPPUNITLIBS=$(shell pkg-config cppunit --libs)
 
 
 OTHERFLAGS=-finline-functions -fno-builtin --pedantic --pedantic-errors -Wall

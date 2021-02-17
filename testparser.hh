@@ -1,8 +1,8 @@
 /*
-  Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
+  Copyright (C) 2013, 2021 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-07-29, lunedì 16:19 (CEST) Massimo Lauria"
-  Time-stamp: "2013-07-29, 17:53 (CEST) Massimo Lauria"
+  Time-stamp: "2021-02-17, 01:36 (CET) Massimo Lauria"
   
   Description::
   
@@ -30,8 +30,6 @@ public:
   virtual void spec_line_parse();
   virtual void read_clauses();
 };
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestDimacsParser, "Testing the dimacs parser" );
 #endif /* _TESTPARSER_HH_ */
 
 

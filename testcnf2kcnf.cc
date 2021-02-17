@@ -1,8 +1,8 @@
 /*
-  Copyright (C) 2013 by Massimo Lauria <lauria.massimo@gmail.com>
+  Copyright (C) 2013, 2021 by Massimo Lauria <lauria.massimo@gmail.com>
   
   Created   : "2013-08-01, giovedì 16:36 (CEST) Massimo Lauria"
-  Time-stamp: "2013-08-20, 19:12 (CEST) Massimo Lauria"
+  Time-stamp: "2021-02-17, 01:37 (CET) Massimo Lauria"
   
   Description::
 
@@ -13,8 +13,12 @@
 // Preamble
 
 
-#include "testcnf2kcnf.hh"
 #include "cnftools.hh"
+#include "testcnf2kcnf.hh"
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestCnf2kcnf,
+                                       "Testing the cnf to k-cnf conversion" );
+
 
 void TestCnf2kcnf::setUp() {}
 void TestCnf2kcnf::tearDown() {}
